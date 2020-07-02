@@ -27,7 +27,7 @@ describe('lib/utility', () => {
 
     before(() => {
       clock = sinon.useFakeTimers({
-        now: new Date("2020-01-02T03:04:05.678"),
+        now: new Date("2020-01-02T03:04:05.678Z"),
         shouldAdvanceTime: false,
       });
     });
@@ -37,7 +37,7 @@ describe('lib/utility', () => {
     });
 
     it('should correctly format ID based on current time', () => {
-      assert.equal(utility.generateIDString(), '20200102020405-678');
+      assert.equal(utility.generateIDString(), '20200102030405-678');
     });
 
   });
