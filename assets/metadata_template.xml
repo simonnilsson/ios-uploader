@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package xmlns="http://apple.com/itunes/importer" version="software5.4">
+  <software_assets apple_id="APPLE_ID" app_platform="ios">
+    <asset type="bundle">
+      <data_file>
+        <size>FILE_SIZE</size>
+        <file_name>FILE_NAME</file_name>
+        <checksum type="md5">MD5</checksum>
+      </data_file>
+    </asset>
+  </software_assets>
+</package>
