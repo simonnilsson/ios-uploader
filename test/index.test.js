@@ -55,9 +55,9 @@ describe('lib/index', () => {
         fileModifiedTime: TEST_CTX.fileModifiedTime,
         fileChecksum: TEST_CTX.fileChecksum,
         metadataBuffer: sinon.match.instanceOf(Buffer),
-        metadataChecksum: TEST_CTX.metadataChecksum,
-        metadataCompressed: TEST_CTX.metadataCompressed,
-        metadataSize: TEST_CTX.metadataSize
+        metadataChecksum: sinon.match.string,
+        metadataCompressed: sinon.match.string,
+        metadataSize: sinon.match.number
       };
       sinon.assert.match(ctx, Object.assign({}, METADATA_INPUT, EXPECTED_METADATA));
     });

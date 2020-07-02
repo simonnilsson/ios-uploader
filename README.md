@@ -2,7 +2,7 @@
 
 [![npm](https://img.shields.io/npm/v/ios-uploader.svg?style=flat-square)](https://www.npmjs.org/package/ios-uploader)
 [![build](https://img.shields.io/travis/simonnilsson/ios-uploader/master.svg?style=flat-square)](https://travis-ci.org/simonnilsson/ios-uploader)
-[![coverage](https://coveralls.io/repos/simonnilsson/ios-uploader/badge.svg?branch=master)](https://coveralls.io/r/simonnilsson/ios-uploader?branch=master)
+[![coverage](https://coveralls.io/repos/github/simonnilsson/ios-uploader/badge.svg?branch=master)](https://coveralls.io/github/simonnilsson/ios-uploader?branch=master)
 [![install size](https://packagephobia.com/badge?p=ios-uploader)](https://packagephobia.com/result?p=ios-uploader)
 
 Easy to use, cross-platform tool to upload an iOS app to iTunes Connect.

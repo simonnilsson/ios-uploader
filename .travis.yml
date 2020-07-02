@@ -1,54 +1,59 @@
+language: node_js
+node_js:
+  - 10
+  - 12
+  - 14
+  - lts/*
+os:
+  - windows
+  - linux
+  - osx
+stages:
+  - Lint
+  - Test
+  - name: Github Release
+    if: branch = master AND tag IS present
+  - name: NPM Release
+    if: branch = master AND tag IS present
 cache:
   directories:
-  - node_modules
-
+    - node_modules
 jobs:
   include:
+    - stage: Lint
+      os: linux
+      node_js: lts/*
+      script: npm run lint
 
-  - stage: lint
-    language: node_js
-    node_js: lts/*
-    script: npm run lint
+    - stage: Test
+      script: npm test
+      after_success: npm run coveralls
 
-  - stage: test
-    language: node_js
-    node_js:
-    - 10
-    - 12
-    - 14
-    - lts/*
-    os:
-    - windows
-    - linux
-    - osx
-    script: npm test
-    after_success: npm run coveralls
+    - stage: Github Release
+      os: linux
+      language: shell
+      script: npm run build && echo "Deploying to github..."
+      deploy:
+        provider: releases
+        api_key: "$GITHUB_API_KEY"
+        file_glob: true
+        skip_cleanup: true
+        cleanup: false
+        file:
+          - "build/ios-uploader-*"
+        on:
+          branch: master
+          tags: true
 
-  - stage: build
-    language: node_js
-    node_js: lts/*
-    script: npm run build
+    - stage: NPM Release
+      os: linux
+      node_js: lts/*
+      script: echo "Deploying to npm..."
+      deploy:
+        provider: npm
+        email: simon@nilsson.ml
+        api_key: "$NPM_API_KEY"
+        on:
+          branch: master
+          tags: true
 
-  - stage: npm release
-    language: node_js
-    node_js: lts/*
-    script: echo "Deploying to npm..."
-    deploy:
-      provider: npm
-      email: simon@nilsson.ml
-      api_key: "$NPM_API_KEY"
-      on:
-        tags: true
-
-  - stage: github release
-    language: minimal
-    script: echo "Deploying to github..."
-    deploy:
-      provider: releases
-      api_key: "$GITHUB_API_KEY"
-      file_glob: true
-      file:
-        - "build/ios-uploader-*"
-      skip_cleanup: true
-      on:
-        tags: true
