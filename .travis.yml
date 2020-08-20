@@ -12,9 +12,9 @@ stages:
   - Lint
   - Test
   - name: Github Release
-    if: branch = master AND tag IS present
+    if: tag IS present
   - name: NPM Release
-    if: branch = master AND tag IS present
+    if: tag IS present
 cache:
   directories:
     - node_modules
