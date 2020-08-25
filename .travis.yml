@@ -31,7 +31,7 @@ jobs:
 
     - stage: Github Release
       os: linux
-      language: shell
+      node_js: lts/*
       script: npm run build && echo "Deploying to github..."
       deploy:
         provider: releases
