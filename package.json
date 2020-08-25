@@ -1,6 +1,6 @@
 {
   "name": "ios-uploader",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Easy to use, cross-platform tool to upload an iOS app to itunes-connect.",
   "keywords": [
     "ipa",
@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "async": "^3.2.0",
-    "axios": "^0.19.2",
+    "axios": "^0.20.0",
     "cli-progress": "^3.8.2",
     "commander": "^6.0.0",
     "pretty-bytes": "^5.3.0",
