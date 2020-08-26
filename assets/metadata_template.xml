@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <package xmlns="http://apple.com/itunes/importer" version="software5.4">
-  <software_assets apple_id="APPLE_ID" app_platform="ios">
+  <software_assets apple_id="APPLE_ID" bundle_short_version_string="BUNDLE_SHORT_VERSION" bundle_version="BUNDLE_VERSION" bundle_identifier="BUNDLE_IDENTIFIER" app_platform="ios">
     <asset type="bundle">
       <data_file>
         <size>FILE_SIZE</size>

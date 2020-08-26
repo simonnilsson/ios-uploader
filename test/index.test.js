@@ -20,6 +20,8 @@ describe('lib/index', () => {
     metadataSize: 406,
     appleId: 'APPLE_ID',
     bundleId: 'BUNDLE_ID',
+    bundleVersion: 'BUNDLE_VERSION',
+    bundleShortVersion: 'BUNDLE_SHORT_VERSION',
     sessionId: 'SESSION_ID',
     sharedSecret: 'SECRET',
     appName: 'APP_NAME',
@@ -242,9 +244,9 @@ describe('lib/index', () => {
               asset_types: [
                 'bundle'
               ],
-              bundle_identifier: '',
-              bundle_short_version_string: '',
-              bundle_version: '',
+              bundle_identifier: TEST_CTX.bundleId,
+              bundle_short_version_string: TEST_CTX.bundleShortVersion,
+              bundle_version: TEST_CTX.bundleVersion,
               device_id: '',
               packageVersion: 'software5.4',
               primary_bundle_identifier: ''

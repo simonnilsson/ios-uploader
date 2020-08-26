@@ -29,15 +29,16 @@ async function runUpload(ctx) {
     // Open the application file for reading.
     ctx.fileHandle = await utility.openFile(ctx.filePath);
 
-    // Bundle ID lookup.
+    // Bundle ID and version lookup.
     try {
       let extracted = await utility.extractBundleIdAndVersion(ctx.fileHandle);
       ctx.bundleId = extracted.bundleId;
       ctx.bundleVersion = extracted.bundleVersion;
+      ctx.bundleShortVersion = extracted.bundleShortVersion;
       console.log(`Found Bundle ID "${ctx.bundleId}", version ${ctx.bundleVersion}.`);
     }
     catch (err) {
-      throw new Error('Failed to extract Bundle ID, are you supplying a valid IPA-file?')
+      throw new Error('Failed to extract Bundle ID and version, are you supplying a valid IPA-file?')
     }
 
     // Authenticate with Apple.

@@ -15,6 +15,8 @@ const TEST_PLIST = `
     <string>BUNDLE_IDENTIFIER</string>
     <key>CFBundleVersion</key>
     <string>BUNDLE_VERSION</string>
+    <key>CFBundleShortVersionString</key>
+    <string>BUNDLE_SHORT_VERSION</string>
   </dict>
 </plist>
 `.trim();
@@ -146,7 +148,7 @@ describe('lib/utility', () => {
 
     it('should resolve on success', async () => {
       let bundleInfo = await utility.extractBundleIdAndVersion(1);
-      assert.deepEqual(bundleInfo, { bundleId: 'BUNDLE_IDENTIFIER', bundleVersion: 'BUNDLE_VERSION' });
+      assert.deepEqual(bundleInfo, { bundleId: 'BUNDLE_IDENTIFIER', bundleVersion: 'BUNDLE_VERSION', bundleShortVersion: 'BUNDLE_SHORT_VERSION' });
     });
 
     it('should reject with error on failure 1', async () => {
