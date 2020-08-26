@@ -15,7 +15,6 @@ const cli = new Command()
   .requiredOption('-u, --username <string>', 'your Apple ID')
   .requiredOption('-p, --password <string>', 'an app-specific password for you Apple ID')
   .requiredOption('-f, --file <string>', 'path to .ipa file for upload')
-  .option('-b, --bundle-id <string>', 'bundle ID of app, will be extracted automatically if omitted')
   .option('-c, --concurrency <number>', 'number of concurrent upload tasks to use', 4);
 
 async function runUpload(ctx) {
@@ -30,20 +29,15 @@ async function runUpload(ctx) {
     // Open the application file for reading.
     ctx.fileHandle = await utility.openFile(ctx.filePath);
 
-    // Auto Bundle ID lookup if not supplied.
-    if (ctx.bundleId) {
-      console.log(`Using supplied Bundle ID "${ctx.bundleId}".`);
+    // Bundle ID lookup.
+    try {
+      let extracted = await utility.extractBundleIdAndVersion(ctx.fileHandle);
+      ctx.bundleId = extracted.bundleId;
+      ctx.bundleVersion = extracted.bundleVersion;
+      console.log(`Found Bundle ID "${ctx.bundleId}", version ${ctx.bundleVersion}.`);
     }
-    else {
-      try {
-        let extracted = await utility.extractBundleIdAndVersion(ctx.fileHandle);
-        ctx.bundleId = extracted.bundleId;
-        ctx.bundleVersion = extracted.bundleVersion;
-        console.log(`Found Bundle ID "${ctx.bundleId}", version ${ctx.bundleVersion}.`);
-      }
-      catch (err) {
-        throw new Error('Failed to extract Bundle ID, are you supplying a valid IPA-file?')
-      }
+    catch (err) {
+      throw new Error('Failed to extract Bundle ID, are you supplying a valid IPA-file?')
     }
 
     // Authenticate with Apple.
@@ -114,7 +108,6 @@ async function run() {
     username: cli.username,
     password: cli.password,
     filePath: cli.file,
-    bundleId: cli.bundleId,
     packageName: 'app.itmsp',
     bytesSent: 0,
     speed: 'N/A'
