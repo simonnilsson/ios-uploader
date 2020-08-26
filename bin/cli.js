@@ -35,10 +35,15 @@ async function runUpload(ctx) {
       console.log(`Using supplied Bundle ID "${ctx.bundleId}".`);
     }
     else {
-      let extracted = await utility.extractBundleIdAndVersion(ctx.fileHandle);
-      ctx.bundleId = extracted.bundleId;
-      ctx.bundleVersion = extracted.bundleVersion;
-      console.log(`Found Bundle ID "${ctx.bundleId}", version ${ctx.bundleVersion}.`);
+      try {
+        let extracted = await utility.extractBundleIdAndVersion(ctx.fileHandle);
+        ctx.bundleId = extracted.bundleId;
+        ctx.bundleVersion = extracted.bundleVersion;
+        console.log(`Found Bundle ID "${ctx.bundleId}", version ${ctx.bundleVersion}.`);
+      }
+      catch (err) {
+        throw new Error('Failed to extract Bundle ID, are you supplying a valid IPA-file?')
+      }
     }
 
     // Authenticate with Apple.
@@ -89,7 +94,7 @@ async function runUpload(ctx) {
   }
   catch (err) {
     progressBar.stop();
-    console.error('Error: ' + err.message);
+    console.error(err.message);
     process.exit(1);
   }
   finally {

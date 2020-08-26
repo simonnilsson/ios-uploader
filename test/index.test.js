@@ -27,6 +27,14 @@ describe('lib/index', () => {
     packageName: 'PACKAGE_NAME'
   }
 
+  describe('constructError()', () => {
+    it('should return a formated error', () => {
+      let err = index.constructError("MESSAGE", { ErrorMessage: 'RESPONSE_ERROR' });
+      assert.ok(err instanceof Error);
+      assert.equal(err.message, 'MESSAGE\nRESPONSE_ERROR');
+    });
+  });
+
   describe('generateMetadata()', () => {
 
     before(() => {
