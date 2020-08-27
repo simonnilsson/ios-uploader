@@ -35,7 +35,7 @@ async function runUpload(ctx) {
       ctx.bundleId = extracted.bundleId;
       ctx.bundleVersion = extracted.bundleVersion;
       ctx.bundleShortVersion = extracted.bundleShortVersion;
-      console.log(`Found Bundle ID "${ctx.bundleId}", version ${ctx.bundleVersion}.`);
+      console.log(`Found Bundle ID "${ctx.bundleId}", Version ${ctx.bundleVersion} (${ctx.bundleShortVersion}).`);
     }
     catch (err) {
       throw new Error('Failed to extract Bundle ID and version, are you supplying a valid IPA-file?')
@@ -47,7 +47,7 @@ async function runUpload(ctx) {
     // Find "Apple ID" of application.
     await api.lookupSoftwareForBundleId(ctx);
 
-    console.log(`Successfully identified bundle as "${ctx.appName}" (${ctx.appleId}).`);
+    console.log(`Identified application as "${ctx.appName}" (${ctx.appleId}).`);
 
     // Generate metadata.
     await api.generateMetadata(ctx);
