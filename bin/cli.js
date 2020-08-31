@@ -9,11 +9,12 @@ const utility = require('../lib/utility');
 const api = require('../lib/index');
 
 const cli = new Command()
-  .version(package.version, '-v, --version', 'output the current version')
+  .version(package.version, '-v, --version', 'output the current version and exit')
   .name(package.name)
   .usage('-u <username> -p <password> -f <file> [additional-options]')
+  .helpOption('-h, --help', 'output this help message and exit')
   .requiredOption('-u, --username <string>', 'your Apple ID')
-  .requiredOption('-p, --password <string>', 'an app-specific password for you Apple ID')
+  .requiredOption('-p, --password <string>', 'app-specific password for your Apple ID')
   .requiredOption('-f, --file <string>', 'path to .ipa file for upload')
   .option('-c, --concurrency <number>', 'number of concurrent upload tasks to use', 4);
 

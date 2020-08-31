@@ -40,12 +40,12 @@ $ xcrun altool --upload-app -u <username> -p <password> -f <path/to/app.ipa>
 ## Options
 
 ```
-  -v, --version               output the current version
+  -v, --version               output the current version and exit
   -u, --username <string>     your Apple ID
-  -p, --password <string>     an app-specific password for you Apple ID
+  -p, --password <string>     app-specific password for your Apple ID
   -f, --file <string>         path to .ipa file for upload
   -c, --concurrency <number>  number of concurrent upload tasks to use (default: 4)
-  -h, --help                  display help for command
+  -h, --help                  output this help message and exit
 ```
 
 ## Disclaimer
