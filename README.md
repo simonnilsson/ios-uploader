@@ -52,6 +52,6 @@ $ xcrun altool --upload-app -u <username> -p <password> -f <path/to/app.ipa>
 
 This package is not endorsed by or in any way associated with Apple Inc. It is provided as is without warranty of any kind. The program may stop working at any time without prior notice if Apple decides to change the API.
 
-## Licence
+## License
 
 [MIT](LICENSE)
