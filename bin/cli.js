@@ -75,7 +75,7 @@ async function runUpload(ctx) {
         ctx.speed = utility.formatSpeed(ctx.bytesSent, Date.now() - ctx.transferStartTime);
         progressBar.update(ctx.bytesSent, { speed: ctx.speed });
       });
-      await q.drain();
+      await Promise.race([q.drain(), q.error()]);
       await api.commitReservation(ctx, reservation);
     }
 

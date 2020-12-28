@@ -498,6 +498,16 @@ describe('lib/index', () => {
       length: 20
     };
 
+    const TEST_BINARY_OPERATION_NETWORK_ERROR = {
+      uri: 'https://example.com/fileupload/error',
+      method: 'PUT',
+      offset: 10,
+      headers: {
+        'Content-Type': 'application/octet-stream'
+      },
+      length: 20
+    };
+
     before(() => {
       const metadataUrl = new url.URL(TEST_METADATA_OPERATION.uri);
       nock(metadataUrl.origin)
@@ -518,6 +528,12 @@ describe('lib/index', () => {
       nock(binaryUrl.origin)
         .intercept(/.*/, TEST_BINARY_OPERATION.method)
         .reply(400);
+
+        const errorUrl = new url.URL(TEST_BINARY_OPERATION_NETWORK_ERROR.uri);
+        nock(errorUrl.origin)
+          .matchHeader('Content-Type', TEST_BINARY_OPERATION_NETWORK_ERROR.headers['Content-Type'])
+          .intercept(errorUrl.pathname, TEST_BINARY_OPERATION_NETWORK_ERROR.method, (body) => body.length === TEST_BINARY_OPERATION_NETWORK_ERROR.length)
+          .replyWithError('Network Error');
 
     });
 
@@ -544,11 +560,16 @@ describe('lib/index', () => {
       sinon.assert.match(ctx, { bytesSent: 0 });
     });
 
-    it('should reject on failure', async () => {
+    it('should reject on status error', async () => {
       const ctx = Object.assign({ bytesSent: 0 }, TEST_CTX);
       ctx.metadataBuffer = Buffer.alloc(ctx.metadataSize);
       const wrongOperation = Object.assign({}, TEST_METADATA_OPERATION, { length: 0 })
       await assert.rejects(index.executeOperation({ ctx, reservation: { file: 'metadata.xml' }, operation: wrongOperation }));
+    });
+
+    it('should reject on request error', async () => {
+      const ctx = Object.assign({ bytesSent: 0 }, TEST_CTX);
+      await assert.rejects(index.executeOperation({ ctx, reservation: { file: TEST_CTX.fileName }, operation: TEST_BINARY_OPERATION_NETWORK_ERROR }));
     });
 
   });
