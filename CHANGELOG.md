@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file.
 
 
+## [1.2.0] - 2020-12-29
+### Fixed
+- Fixed error handling on failed upload #7
+
+### Changed
+- Updated dependencies
+
+
 ## [1.1.3] - 2020-11-06
 ### Added
 - Added CHANGELOG.md
