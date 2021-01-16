@@ -2,6 +2,16 @@
 All notable changes to this project will be documented in this file.
 
 
+## [1.2.1] - 2021-01-16
+### Fixed
+- Catch error thrown by plist parsing #9
+- Make Info.plist regex more specific #9
+- Fix upload of big application archives #7
+
+### Changed
+- Updated dependencies
+
+
 ## [1.2.0] - 2020-12-29
 ### Fixed
 - Fixed error handling on failed upload #7
