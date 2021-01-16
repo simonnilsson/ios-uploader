@@ -66,7 +66,7 @@ async function runUpload(ctx) {
 
     progressBar.start(ctx.metadataSize + ctx.fileSize, 0, { speed: ctx.speed });
 
-    let q = queue(api.executeOperation, cli.concurrency);
+    let q = queue(api.executeOperation, ctx.concurrency);
 
     // Start uploading.
     for (let reservation of reservations) {
@@ -105,11 +105,14 @@ async function run() {
   // Parse command line params
   cli.parse(process.argv);
 
+  const options = cli.opts();
+
   // Context variable keeping track of all the necessary information for upload procedure.
   const ctx = {
-    username: cli.username,
-    password: cli.password,
-    filePath: cli.file,
+    username: options.username,
+    password: options.password,
+    filePath: options.file,
+    concurrency: options.concurrency,
     packageName: 'app.itmsp',
     bytesSent: 0,
     speed: 'N/A'

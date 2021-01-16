@@ -29,19 +29,19 @@
     "async": "^3.2.0",
     "axios": "^0.21.1",
     "cli-progress": "^3.8.2",
-    "commander": "^6.2.1",
+    "commander": "^7.0.0",
     "pretty-bytes": "^5.5.0",
     "simple-plist": "^1.1.1",
     "unzipper": "^0.10.11"
   },
   "devDependencies": {
     "coveralls": "^3.1.0",
-    "eslint": "^7.16.0",
+    "eslint": "^7.18.0",
     "mocha": "^8.2.1",
     "nock": "^13.0.5",
     "nyc": "^15.1.0",
     "pkg": "^4.4.9",
-    "sinon": "^9.2.2"
+    "sinon": "^9.2.3"
   },
   "pkg": {
     "scripts": [
