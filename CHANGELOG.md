@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.2.2] - 2021-03-27
+### Changed
+- Updated dependencies
+
 
 ## [1.2.1] - 2021-01-16
 ### Fixed
