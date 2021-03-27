@@ -5,7 +5,7 @@
 [![coverage](https://coveralls.io/repos/github/simonnilsson/ios-uploader/badge.svg?branch=master)](https://coveralls.io/github/simonnilsson/ios-uploader?branch=master)
 [![install size](https://packagephobia.com/badge?p=ios-uploader)](https://packagephobia.com/result?p=ios-uploader)
 
-Easy to use, cross-platform tool to upload an iOS app to iTunes Connect.
+Easy to use, cross-platform tool to upload iOS apps to App Store Connect.
 
 ## Installation
 
