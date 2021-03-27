@@ -29,7 +29,6 @@ jobs:
     - run: npm test
 
   coveralls:
-    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -37,7 +36,7 @@ jobs:
       with:
         node-version: 14
     - run: npm ci
-    - run: npm run coveralls
+    - run: npm run coverage
     - uses: coverallsapp/github-action@master
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
