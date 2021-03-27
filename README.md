@@ -1,7 +1,7 @@
 # ios-uploader
 
 [![npm](https://img.shields.io/npm/v/ios-uploader.svg?style=flat-square)](https://www.npmjs.org/package/ios-uploader)
-[![build](https://img.shields.io/travis/simonnilsson/ios-uploader/master.svg?style=flat-square)](https://travis-ci.org/simonnilsson/ios-uploader)
+[![build](https://github.com/simonnilsson/ios-uploader/workflows/ci/badge.svg)](https://github.com/simonnilsson/ios-uploader/actions?query=workflow%3Aci+branch%3Amaster)
 [![coverage](https://coveralls.io/repos/github/simonnilsson/ios-uploader/badge.svg?branch=master)](https://coveralls.io/github/simonnilsson/ios-uploader?branch=master)
 [![install size](https://packagephobia.com/badge?p=ios-uploader)](https://packagephobia.com/result?p=ios-uploader)
 
