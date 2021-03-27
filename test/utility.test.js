@@ -128,6 +128,15 @@ describe('lib/utility', () => {
         });
       });
 
+      readStreamStub.withArgs(sinon.match.string, sinon.match({ fd: 3 })).callsFake(() => {
+        return new stream.Readable({
+          read: function() {
+            this.push('nothing');
+            this.push(null);
+          }
+        });
+      });
+
       let unzipperStub = sinon.stub(unzipper, 'ParseOne');
 
       unzipperStub.callsFake(() => {
@@ -135,6 +144,7 @@ describe('lib/utility', () => {
           write: function(s) {
             if (s.toString() === 'data') this.emit('data', TEST_PLIST);
             if (s.toString() === 'error') this.emit('error', new Error());
+            if (s.toString() === 'empty') this.emit('data', '');
             this.emit('end');
           }
         });
@@ -157,6 +167,10 @@ describe('lib/utility', () => {
 
     it('should reject with error on failure 2', async () => {
       await assert.rejects(utility.extractBundleIdAndVersion(2));
+    });
+
+    it('should reject with error on failure 3', async () => {
+      await assert.rejects(utility.extractBundleIdAndVersion(3));
     });
 
   });
