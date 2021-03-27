@@ -28,20 +28,20 @@
   "dependencies": {
     "async": "^3.2.0",
     "axios": "^0.21.1",
-    "cli-progress": "^3.8.2",
-    "commander": "^7.0.0",
-    "pretty-bytes": "^5.5.0",
+    "cli-progress": "^3.9.0",
+    "commander": "^7.2.0",
+    "pretty-bytes": "^5.6.0",
     "simple-plist": "^1.1.1",
     "unzipper": "^0.10.11"
   },
   "devDependencies": {
     "coveralls": "^3.1.0",
-    "eslint": "^7.18.0",
-    "mocha": "^8.2.1",
-    "nock": "^13.0.5",
+    "eslint": "^7.23.0",
+    "mocha": "^8.3.2",
+    "nock": "^13.0.11",
     "nyc": "^15.1.0",
-    "pkg": "^4.4.9",
-    "sinon": "^9.2.3"
+    "pkg": "^4.5.1",
+    "sinon": "^10.0.0"
   },
   "pkg": {
     "scripts": [
