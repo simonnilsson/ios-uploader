@@ -13,7 +13,7 @@ Easy to use, cross-platform tool to upload iOS apps to App Store Connect.
 * **OS**: Windows, macOS or Linux
 * **Node.js**: v10 or newer (bundled with standalone binaries)
 
-If you have Node.js and npm installed the simplest way is to just install the package globaly. The tool will automatically be added to your PATH as `ios-uploader`.
+If you have Node.js and npm installed the simplest way is to just install the package globally. The tool will automatically be added to your PATH as `ios-uploader`.
 
 ```sh
 npm install -g ios-uploader
@@ -35,7 +35,7 @@ is equivalent to the following command using altool (macOS only):
 $ xcrun altool --upload-app -u <username> -p <password> -f <path/to/app.ipa>
 ```
 
-> See this page for information on how to generate an app specific password: https://support.apple.com/en-us/HT204397
+> See this page for information on how to generate an app specific password: <br>https://support.apple.com/en-us/HT204397
 
 ## Options
 
