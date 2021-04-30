@@ -1,6 +1,15 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.2.3] - 2021-04-30
+### Fixed
+- Minor README fixes
+
+### Changed
+- Updated dependencies
+- Moved CI to Github Actions
+
+
 ## [1.2.2] - 2021-03-27
 ### Changed
 - Updated dependencies
