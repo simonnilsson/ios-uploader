@@ -54,10 +54,10 @@
     ],
     "assets": "./assets/**/*",
     "targets": [
-      "node10-win-x64",
-      "node10-macos-x64",
-      "node10-linux-x64",
-      "node10-alpine-x64"
+      "node12-win-x64",
+      "node12-macos-x64",
+      "node12-linux-x64",
+      "node12-alpine-x64"
     ]
   }
 }
