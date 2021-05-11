@@ -1,6 +1,17 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.3.0] - 2021-05-11
+### Fixed
+- Limit what files get published to npm
+
+### Changed
+- Updated dependencies
+- Renamed npm token in build
+- Added Node v16 to CI tests
+- Binary releases now bundle Node v12
+
+
 ## [1.2.3] - 2021-04-30
 ### Fixed
 - Minor README fixes
