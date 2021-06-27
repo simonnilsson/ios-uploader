@@ -1,8 +1,9 @@
 const assert = require('assert').strict;
 const sinon = require('sinon');
 const fs = require('fs');
-const unzipper = require('unzipper');
 const stream = require('stream');
+const yauzl = require("yauzl");
+const zlib = require('zlib');
 
 const utility = require('../lib/utility');
 
@@ -17,6 +18,15 @@ const TEST_PLIST = `
     <string>BUNDLE_VERSION</string>
     <key>CFBundleShortVersionString</key>
     <string>BUNDLE_SHORT_VERSION</string>
+  </dict>
+</plist>
+`.trim();
+
+const EMPTY_PLIST = `
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
   </dict>
 </plist>
 `.trim();
@@ -97,58 +107,118 @@ describe('lib/utility', () => {
 
   });
 
+  
+  describe('readFileDataFromZip()', () => {
+
+    before(() => {
+
+      let fromFdStub = sinon.stub(yauzl, 'fromFd')
+
+      let zipFileOK = {
+        on: () => {},
+        openReadStream: () => {},
+        readEntry: () => {}
+      };
+
+      let zipFileOKMock = sinon.mock(zipFileOK);
+      let okEntry = { fileName: 'Payload/Test.app/Info.plist'};
+      let okStream = new stream.Readable({
+        read: function() {
+          this.push(TEST_PLIST);
+          this.push(null);
+        }
+      });
+      zipFileOKMock.expects('readEntry').once().returns();
+      zipFileOKMock.expects('openReadStream').withArgs(okEntry).yields(null, okStream);
+      zipFileOKMock.expects('on').withArgs('entry').yields(okEntry);
+      zipFileOKMock.expects('on').withArgs('error').returns();
+      zipFileOKMock.expects('on').withArgs('end').returns();
+
+      fromFdStub.withArgs(0, sinon.match.object)
+        .yields(null, zipFileOK);
+
+      let zipFileReadErr = {
+        on: () => {},
+        openReadStream: () => {},
+        readEntry: () => {}
+      };
+
+      let zipFileReadErrMock = sinon.mock(zipFileReadErr);
+      
+      zipFileReadErrMock.expects('readEntry').once().returns();
+      zipFileReadErrMock.expects('openReadStream').withArgs(okEntry).yields(new Error('STREAM_ERR'), null);
+      zipFileReadErrMock.expects('on').withArgs('entry').yields(okEntry);
+      zipFileReadErrMock.expects('on').withArgs('error').returns();
+      zipFileReadErrMock.expects('on').withArgs('end').returns();
+
+      fromFdStub.withArgs(1, sinon.match.object)
+        .yields(null, zipFileReadErr);
+
+      let zipFileWrong = {
+        on: () => {},
+        openReadStream: () => {},
+        readEntry: () => {}
+      };
+
+      let zipFileWrongMock = sinon.mock(zipFileWrong);
+      let wrongEntry = { fileName: 'Payload/Test.app/other.file'};
+      zipFileWrongMock.expects('readEntry').once().returns();
+      zipFileWrongMock.expects('openReadStream').never();
+      zipFileWrongMock.expects('on').withArgs('entry').yields(wrongEntry);
+      zipFileWrongMock.expects('on').withArgs('error').returns();
+      zipFileWrongMock.expects('on').withArgs('end').yields();
+
+      fromFdStub.withArgs(2, sinon.match.object)
+        .yields(null, zipFileWrong);
+
+      fromFdStub.withArgs(3, sinon.match.object)
+        .yields(new Error('TEST_ERROR'), null);
+    });
+
+    after(() => {
+      sinon.restore();
+    });
+
+    it('should resolve on success', async () => {
+      let data = await utility.readFileDataFromZip(0, /^Payload\/[^/]*.app\/Info\.plist$/);
+      sinon.assert.match(data, sinon.match.instanceOf(Buffer));
+    });
+
+    it('should throw if unable to open read stream', async () => {
+      await assert.rejects(utility.readFileDataFromZip(1, /^Payload\/[^/]*.app\/Info\.plist$/), { message: 'STREAM_ERR' });
+    });
+
+    it('should resolve to null if not found', async () => {
+      let data = await utility.readFileDataFromZip(2, /^Payload\/[^/]*.app\/Info\.plist$/);
+      sinon.assert.match(data, null);
+    });
+
+    it('should throw if unable to read file', async () => {
+      await assert.rejects(utility.readFileDataFromZip(3, /^Payload\/[^/]*.app\/Info\.plist$/), { message: 'TEST_ERROR' });
+    });
+  });
+
   describe('extractBundleIdAndVersion()', () => {
 
     before(() => {
-      let readStreamStub = sinon.stub(fs, 'createReadStream');
-      readStreamStub.withArgs(sinon.match.string, sinon.match({ fd: 1 })).callsFake(() => {
-        return new stream.Readable({
-          read: function() {
-            this.push('data');
-            this.push(null);
-          }
-        });
-      });
 
-      readStreamStub.withArgs(sinon.match.string, sinon.match({ fd: 0 })).callsFake(() => {
-        return new stream.Readable({
-          read: function() {
-            this.push('error');
-            this.push(null);
-          }
-        });
-      });
+      let readFileDataFromZipStub = sinon.stub(utility, 'readFileDataFromZip');
 
-      readStreamStub.withArgs(sinon.match.string, sinon.match({ fd: 2 })).callsFake(() => {
-        return new stream.Readable({
-          read: function() {
-            this.push('empty');
-            this.push(null);
-          }
-        });
-      });
+      readFileDataFromZipStub
+        .withArgs(0, sinon.match.regexp)
+        .resolves(Buffer.from(TEST_PLIST));
 
-      readStreamStub.withArgs(sinon.match.string, sinon.match({ fd: 3 })).callsFake(() => {
-        return new stream.Readable({
-          read: function() {
-            this.push('nothing');
-            this.push(null);
-          }
-        });
-      });
+      readFileDataFromZipStub
+        .withArgs(1, sinon.match.regexp)
+        .resolves(null);
 
-      let unzipperStub = sinon.stub(unzipper, 'ParseOne');
+      readFileDataFromZipStub
+        .withArgs(2, sinon.match.regexp)
+        .resolves(Buffer.from('INVALID'));
 
-      unzipperStub.callsFake(() => {
-        return new stream.Writable({
-          write: function(s) {
-            if (s.toString() === 'data') this.emit('data', TEST_PLIST);
-            if (s.toString() === 'error') this.emit('error', new Error());
-            if (s.toString() === 'empty') this.emit('data', '');
-            this.emit('end');
-          }
-        });
-      });
+      readFileDataFromZipStub
+        .withArgs(3, sinon.match.regexp)
+        .resolves(Buffer.from(EMPTY_PLIST));
 
     });
 
@@ -157,20 +227,20 @@ describe('lib/utility', () => {
     });
 
     it('should resolve on success', async () => {
-      let bundleInfo = await utility.extractBundleIdAndVersion(1);
+      let bundleInfo = await utility.extractBundleIdAndVersion(0);
       assert.deepEqual(bundleInfo, { bundleId: 'BUNDLE_IDENTIFIER', bundleVersion: 'BUNDLE_VERSION', bundleShortVersion: 'BUNDLE_SHORT_VERSION' });
     });
 
     it('should reject with error on failure 1', async () => {
-      await assert.rejects(utility.extractBundleIdAndVersion(0));
+      await assert.rejects(utility.extractBundleIdAndVersion(1), { message: 'Info.plist not found' });
     });
 
     it('should reject with error on failure 2', async () => {
-      await assert.rejects(utility.extractBundleIdAndVersion(2));
+      await assert.rejects(utility.extractBundleIdAndVersion(2), { message: 'Failed to parse Info.plist' });
     });
 
     it('should reject with error on failure 3', async () => {
-      await assert.rejects(utility.extractBundleIdAndVersion(3));
+      await assert.rejects(utility.extractBundleIdAndVersion(3), { message: 'Bundle info not found in Info.plist' });
     });
 
   });
@@ -307,7 +377,17 @@ describe('lib/utility', () => {
     });
 
     it('should reject with error on failure', async () => {
-      await assert.rejects(utility.bufferToGZBase64(0));
+      const zlibMock = sinon.mock(zlib);
+  
+      zlibMock.expects('gzip')
+        .withArgs(sinon.match.instanceOf(Buffer))
+        .once()
+        .yields(new Error('TEST_ERROR'), null);
+
+      await assert.rejects(utility.bufferToGZBase64(Buffer.alloc(0)));
+
+      zlibMock.verify();
+      sinon.restore();
     });
 
   });

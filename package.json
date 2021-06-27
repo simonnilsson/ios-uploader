@@ -30,9 +30,10 @@
     "axios": "^0.21.1",
     "cli-progress": "^3.9.0",
     "commander": "^7.2.0",
+    "concat-stream": "^2.0.0",
     "pretty-bytes": "^5.6.0",
     "simple-plist": "^1.1.1",
-    "unzipper": "^0.10.11"
+    "yauzl": "^2.10.0"
   },
   "devDependencies": {
     "eslint": "^7.26.0",
