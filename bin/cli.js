@@ -39,6 +39,7 @@ async function runUpload(ctx) {
       console.log(`Found Bundle ID "${ctx.bundleId}", Version ${ctx.bundleVersion} (${ctx.bundleShortVersion}).`);
     }
     catch (err) {
+      console.error(err.message);
       throw new Error('Failed to extract Bundle ID and version, are you supplying a valid IPA-file?')
     }
 
