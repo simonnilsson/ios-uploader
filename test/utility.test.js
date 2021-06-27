@@ -331,11 +331,12 @@ describe('lib/utility', () => {
   describe('getFilePart()', () => {
 
     before(() => {
-      let stub = sinon.stub(fs, 'read')
-      stub.withArgs(1, sinon.match.instanceOf(Buffer), sinon.match.number).callsFake((fd, buffer) => {
+      let fsMock = sinon.mock(fs)
+      fsMock.expects('read').withArgs(1, sinon.match.instanceOf(Buffer), 0, 4, 0).callsFake((fd, buffer, offset, length, position, cb) => {
         buffer.write('PART');
-      }).yields(undefined);
-      stub.yields(new Error());
+        cb();
+      });
+      fsMock.expects('read').yields(new Error());
     });
 
     after(() => {
