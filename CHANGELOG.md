@@ -1,6 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.4.0] - 2021-06-27
+### Fixed
+- Rework of bundle info lookup to solve issues with some IPA-files.
+- Improved error message when bundle info lookup fails
+
+### Changed
+- Updated dependencies
+
 ## [1.3.0] - 2021-05-11
 ### Fixed
 - Limit what files get published to npm
