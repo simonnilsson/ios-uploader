@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Updated dependencies
 
+
 ## [1.3.0] - 2021-05-11
 ### Fixed
 - Limit what files get published to npm
