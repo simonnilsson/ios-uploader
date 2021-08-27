@@ -1,6 +1,17 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.5.0] - 2021-08-27
+### Added
+- Added support for HTTP/HTTPS URLs to .ipa #16
+
+### Fixed
+- Fixed Coveralls badge link
+
+### Changed
+- Updated dependencies
+
+
 ## [1.4.0] - 2021-06-27
 ### Fixed
 - Rework of bundle info lookup to solve issues with some IPA-files.
