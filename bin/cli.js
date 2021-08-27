@@ -15,10 +15,12 @@ const cli = new Command()
   .helpOption('-h, --help', 'output this help message and exit')
   .requiredOption('-u, --username <string>', 'your Apple ID')
   .requiredOption('-p, --password <string>', 'app-specific password for your Apple ID')
-  .requiredOption('-f, --file <string>', 'path to .ipa file for upload')
+  .requiredOption('-f, --file <string>', 'path to .ipa file for upload (local file, http:// or https:// URL)')
   .option('-c, --concurrency <number>', 'number of concurrent upload tasks to use', 4);
 
 async function runUpload(ctx) {
+
+  let exitCode = 0;
 
   const progressBar = new cliProgress.Bar({
     format: 'Uploading |{bar}| {percentage}% | {value}/{total} bytes | ETA: {eta}s | Speed: {speed}',
@@ -26,6 +28,18 @@ async function runUpload(ctx) {
   }, cliProgress.Presets.shades_classic);
 
   try {
+
+    // Handle URLs to ipa file.
+    if (ctx.filePath.startsWith('ftp://') || ctx.filePath.startsWith('https://')) {
+      ctx.originalFilePath = ctx.filePath;
+      try {
+        ctx.filePath = await utility.downloadTempFile(ctx.filePath);
+      }
+      catch (err) {
+        throw new Error(`Could not download file: ${err.message}`)
+      }
+      ctx.usingTempFile = true;
+    }
 
     // Open the application file for reading.
     ctx.fileHandle = await utility.openFile(ctx.filePath);
@@ -92,13 +106,18 @@ async function runUpload(ctx) {
   catch (err) {
     progressBar.stop();
     console.error(err.message);
-    process.exit(1);
+    exitCode = 1;
   }
   finally {
     if (ctx.fileHandle) {
       await utility.closeFile(ctx.fileHandle);
     }
+    if (ctx.usingTempFile) {
+      await utility.removeTempFile(ctx.filePath);
+    }
   }
+
+  process.exit(exitCode);
 }
 
 async function run() {

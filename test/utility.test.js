@@ -4,6 +4,7 @@ const fs = require('fs');
 const stream = require('stream');
 const yauzl = require("yauzl");
 const zlib = require('zlib');
+const axios = require('axios');
 
 const utility = require('../lib/utility');
 
@@ -241,6 +242,80 @@ describe('lib/utility', () => {
 
     it('should reject with error on failure 3', async () => {
       await assert.rejects(utility.extractBundleIdAndVersion(3), { message: 'Bundle info not found in Info.plist' });
+    });
+
+  });
+
+  describe('ensureTempDir()', () => {
+
+    before(() => {
+      let stub = sinon.stub(fs.promises, 'mkdir');
+      stub.withArgs(sinon.match.string, { recursive: true }).resolves(undefined);
+    });
+
+    after(() => {
+      sinon.restore();
+    });
+
+    it('should resolve on success', async () => {
+      let res = await utility.ensureTempDir();
+      sinon.assert.match(res, sinon.match.string);
+    });
+
+  });
+
+  describe('downloadTempFile()', () => {
+
+    before(() => {
+      let readableStream = new stream.PassThrough();
+      readableStream.end();
+
+      let axiosStub = sinon.stub(axios, 'get');
+      axiosStub.withArgs(sinon.match.string, { responseType: 'stream' })
+        .resolves({ data: readableStream });
+
+      let ensureTempDirStub = sinon.stub(utility, 'ensureTempDir')
+      ensureTempDirStub.resolves('PATH');
+
+      let writeStream = new stream.Writable();      
+
+      let createWriteStreamStub = sinon.stub(fs, 'createWriteStream');
+      createWriteStreamStub.withArgs(sinon.match.string).returns(writeStream);
+    });
+
+    after(() => {
+      sinon.restore();
+    });
+
+    it('should resolve on success', async () => {
+      let res = await utility.downloadTempFile('http://example.com/app.ipa');
+      sinon.assert.match(res, 'PATH');
+    });
+
+    it('should reject with error on failure', async () => {
+      await assert.rejects(utility.downloadTempFile());
+    });
+
+  });
+
+  describe('removeTempFile()', () => {
+
+    before(() => {
+      let unlinkStub = sinon.stub(fs.promises, 'unlink');
+      unlinkStub.withArgs('FILE_PATH').resolves();
+      unlinkStub.rejects();
+    });
+
+    after(() => {
+      sinon.restore();
+    });
+
+    it('should resolve on success', async () => {
+      await utility.removeTempFile('FILE_PATH');
+    });
+
+    it('should reject with error on failure', async () => {
+      await assert.rejects(utility.removeTempFile());
     });
 
   });
