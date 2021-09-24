@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.5.1] - 2021-09-24
+### Changed
+- Updated dependencies
+
+
 ## [1.5.0] - 2021-08-27
 ### Added
 - Added support for HTTP/HTTPS URLs to .ipa #16
