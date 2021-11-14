@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+### Changed
+- **BREAKING** Dropped support for Node v10
+
+
 ## [1.5.2] - 2021-11-14
 ### Changed
 - Updated dependencies
