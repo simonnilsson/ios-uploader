@@ -2,6 +2,9 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+
+
+## [2.0.0] - 2022-01-18
 ### Changed
 - **BREAKING** Dropped support for Node v10
 - Bump binary releases from Node v12 to v14
