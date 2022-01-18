@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - **BREAKING** Dropped support for Node v10
 - Bump binary releases from Node v12 to v14
+- Updated dependencies
 
 
 ## [1.5.2] - 2021-11-14
