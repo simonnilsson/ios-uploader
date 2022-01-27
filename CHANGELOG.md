@@ -2,6 +2,7 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+- Updated dependencies
 
 
 ## [2.0.0] - 2022-01-18
