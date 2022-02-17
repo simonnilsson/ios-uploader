@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+### Changed
+- Updated dependencies
+
 ## [2.0.1] - 2022-02-05
 ### Changed
 - Updated dependencies
