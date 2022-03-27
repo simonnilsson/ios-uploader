@@ -15,8 +15,10 @@ const cli = new Command()
   .helpOption('-h, --help', 'output this help message and exit')
   .requiredOption('-u, --username <string>', 'your Apple ID')
   .requiredOption('-p, --password <string>', 'app-specific password for your Apple ID')
-  .requiredOption('-f, --file <string>', 'path to .ipa file for upload (local file, http:// or https:// URL)')
+  .requiredOption('-f, --file <string>', 'path to .ipa file for upload (local file, http(s):// or ftp:// URL)')
   .option('-c, --concurrency <number>', 'number of concurrent upload tasks to use', 4);
+
+const fileUrlRegex = /^(?:https?|ftp):\/\//;
 
 async function runUpload(ctx) {
 
@@ -30,7 +32,7 @@ async function runUpload(ctx) {
   try {
 
     // Handle URLs to ipa file.
-    if (ctx.filePath.startsWith('ftp://') || ctx.filePath.startsWith('https://')) {
+    if (fileUrlRegex.test(ctx.filePath)) {
       ctx.originalFilePath = ctx.filePath;
       try {
         ctx.filePath = await utility.downloadTempFile(ctx.filePath);
