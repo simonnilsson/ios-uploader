@@ -2,6 +2,9 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+
+
+## [2.1.0] - 2022-03-27
 ### Fixed
 - Correctly support http:// URLs.
 - Add FTP support to help output
