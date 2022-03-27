@@ -3,6 +3,7 @@
 const { queue } = require('async');
 const { Command } = require('commander');
 const cliProgress = require('cli-progress');
+const prettyBytes = require('pretty-bytes');
 const package = require('../package');
 
 const utility = require('../lib/utility');
@@ -20,13 +21,24 @@ const cli = new Command()
 
 const fileUrlRegex = /^(?:https?|ftp):\/\//;
 
+function formatValue(v, options, type){
+  switch (type){
+    case 'value':
+    case 'total':
+      return prettyBytes(v);
+    default:
+      return v;
+  }
+}
+
 async function runUpload(ctx) {
 
   let exitCode = 0;
 
   const progressBar = new cliProgress.Bar({
-    format: 'Uploading |{bar}| {percentage}% | {value}/{total} bytes | ETA: {eta}s | Speed: {speed}',
-    hideCursor: true
+    format: '{task} |{bar}| {percentage}% | {value} / {total} | ETA: {etas} | Speed: {speed}',
+    hideCursor: true,
+    formatValue,
   }, cliProgress.Presets.shades_classic);
 
   try {
@@ -35,7 +47,15 @@ async function runUpload(ctx) {
     if (fileUrlRegex.test(ctx.filePath)) {
       ctx.originalFilePath = ctx.filePath;
       try {
-        ctx.filePath = await utility.downloadTempFile(ctx.filePath);
+        const transferStartTime = Date.now();
+        let started = false;
+        ctx.filePath = await utility.downloadTempFile(ctx.filePath, (current, total) => {
+          let { speed, eta } = utility.formatSpeedAndEta(current, total, Date.now() - transferStartTime);
+          !started ? progressBar.start(total, current, { task: 'Downloading', speed, etas: eta })
+          : progressBar.update(current, { speed, etas: eta });
+          started = true;
+        });
+        progressBar.stop();
       }
       catch (err) {
         throw new Error(`Could not download file: ${err.message}`)
@@ -80,8 +100,9 @@ async function runUpload(ctx) {
 
     // For time calculations.
     ctx.transferStartTime = Date.now();
+    ctx.bytesSent = 0;
 
-    progressBar.start(ctx.metadataSize + ctx.fileSize, 0, { speed: ctx.speed });
+    progressBar.start(ctx.metadataSize + ctx.fileSize, 0, { task: 'Uploading', speed: 'N/A', etas: 'N/A' });
 
     let q = queue(api.executeOperation, ctx.concurrency);
 
@@ -89,8 +110,8 @@ async function runUpload(ctx) {
     for (let reservation of reservations) {
       let tasks = reservation.operations.map(operation => ({ ctx, reservation, operation }));
       q.push(tasks, () => {
-        ctx.speed = utility.formatSpeed(ctx.bytesSent, Date.now() - ctx.transferStartTime);
-        progressBar.update(ctx.bytesSent, { speed: ctx.speed });
+        let { speed, eta } = utility.formatSpeedAndEta(ctx.bytesSent, ctx.metadataSize + ctx.fileSize, Date.now() - ctx.transferStartTime);
+        progressBar.update(ctx.bytesSent, { speed, etas: eta });
       });
       await Promise.race([q.drain(), q.error()]);
       await api.commitReservation(ctx, reservation);
@@ -136,14 +157,22 @@ async function run() {
     filePath: options.file,
     concurrency: options.concurrency,
     packageName: 'app.itmsp',
-    bytesSent: 0,
-    speed: 'N/A'
   };
 
   await runUpload(ctx);
 }
 
+function stop(signal) {
+
+  // Fix to make sure cursor gets restored to visible state when exiting mid progress.
+  process.stderr.write('\u001B[?25h');
+
+  process.exit(128 + signal);
+}
+
 // Run only if called directly (e.g. not when tested)
 if (require.main === module) {
+  process.on('SIGINT', () => stop(2));
+  process.on('SIGTERM', () => stop(15));
   run();
 }

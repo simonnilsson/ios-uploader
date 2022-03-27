@@ -266,13 +266,16 @@ describe('lib/utility', () => {
 
   describe('downloadTempFile()', () => {
 
-    before(() => {
+    beforeEach(() => {
       let readableStream = new stream.PassThrough();
       readableStream.end();
 
       let axiosStub = sinon.stub(axios, 'get');
-      axiosStub.withArgs(sinon.match.string, { responseType: 'stream' })
-        .resolves({ data: readableStream });
+      axiosStub.withArgs('http://example.com/app.ipa', { responseType: 'stream' })
+        .resolves({ data: readableStream, headers: { 'content-length': 1 } });
+
+      axiosStub.withArgs('http://example.com/app-no-cl.ipa', { responseType: 'stream' })
+        .resolves({ data: readableStream, headers: { } });
 
       let ensureTempDirStub = sinon.stub(utility, 'ensureTempDir')
       ensureTempDirStub.resolves('PATH');
@@ -283,13 +286,22 @@ describe('lib/utility', () => {
       createWriteStreamStub.withArgs(sinon.match.string).returns(writeStream);
     });
 
-    after(() => {
+    afterEach(() => {
       sinon.restore();
     });
 
     it('should resolve on success', async () => {
-      let res = await utility.downloadTempFile('http://example.com/app.ipa');
+      const onProgressCallback = sinon.spy();
+      let res = await utility.downloadTempFile('http://example.com/app.ipa', onProgressCallback);
       sinon.assert.match(res, 'PATH');
+      sinon.assert.called(onProgressCallback);
+    });
+
+    it('should not call onProgress if content-length unknown', async () => {
+      const onProgressCallback = sinon.spy();
+      let res = await utility.downloadTempFile('http://example.com/app-no-cl.ipa', onProgressCallback);
+      sinon.assert.match(res, 'PATH');
+      sinon.assert.notCalled(onProgressCallback);
     });
 
     it('should reject with error on failure', async () => {
@@ -468,18 +480,22 @@ describe('lib/utility', () => {
 
   });
 
-  describe('formatSpeed()', () => {
+  describe('formatSpeedAndEta()', () => {
 
     it('should correctly format B/s', () => {
-      assert.equal(utility.formatSpeed(10, 1000), '10 B/s');
+      assert.deepEqual(utility.formatSpeedAndEta(10, 10, 1000), { eta: '0s', speed: '10 B/s' });
     });
 
     it('should correctly format kB/s', () => {
-      assert.equal(utility.formatSpeed(10, 1), '10 kB/s');
+      assert.deepEqual(utility.formatSpeedAndEta(10000, 10000, 1000), { eta: '0s', speed: '10 kB/s' });
     });
 
     it('should correctly format MB/s', () => {
-      assert.equal(utility.formatSpeed(10000, 1), '10 MB/s');
+      assert.deepEqual(utility.formatSpeedAndEta(10000000, 10000000, 1000), { eta: '0s', speed: '10 MB/s' });
+    });
+
+    it('should correctly format eta', () => {
+      assert.deepEqual(utility.formatSpeedAndEta(10, 1000, 1000), { eta: '99s', speed: '10 B/s' });
     });
 
   });
