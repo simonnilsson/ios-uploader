@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 
 ### Changed
 - Progress bar improvements
+- Updated dependencies
 
 
 ## [2.0.2] - 2022-02-17
