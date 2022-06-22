@@ -2,9 +2,13 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+
+
+## [2.2.0] - 2022-06-22
 ### Changed
 - Reduced size of progress indicator
 - Updated dependencies
+
 
 ## [2.1.1] - 2022-04-18
 ### Changed
