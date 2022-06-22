@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
-
+- Reduced size of progress indicator
 
 ## [2.1.1] - 2022-04-18
 ### Changed

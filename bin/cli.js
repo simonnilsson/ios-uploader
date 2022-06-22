@@ -36,8 +36,9 @@ async function runUpload(ctx) {
   let exitCode = 0;
 
   const progressBar = new cliProgress.Bar({
-    format: '{task} |{bar}| {percentage}% | {value} / {total} | ETA: {etas} | Speed: {speed}',
+    format: '{task} |{bar}| {percentage}% | {value} / {total} | {speed}',
     hideCursor: true,
+    barsize: 20,
     formatValue,
   }, cliProgress.Presets.shades_classic);
 
