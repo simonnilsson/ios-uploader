@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 ### Changed
 - Updated dependencies
+- Added Node v18 to CI workflow
 
 
 ## [2.2.0] - 2022-06-22
