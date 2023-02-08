@@ -2,6 +2,9 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+
+
+## [2.2.2] - 2023-02-08
 ### Changed
 - Downgrade to axios@0.27.2 to fix pkg builds
 
