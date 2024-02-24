@@ -12,7 +12,7 @@ Easy to use, cross-platform tool to upload iOS apps to App Store Connect.
 
 ### System Requirements
 * **OS**: Windows, macOS or Linux
-* **Node.js**: v12 or newer (bundled with standalone binaries)
+* **Node.js**: v18 or newer (bundled with standalone binaries)
 
 If you have Node.js and npm installed the simplest way is to just install the package globally. The tool will automatically be added to your PATH as `ios-uploader`.
 
