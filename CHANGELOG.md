@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 
+## [3.0.0] - 2024-02-24
+### Changed
+- **BREAKING** Dropped support for Node versions below v18
+- Bump binary releases from Node v14 to v18
+- Added Node v20 to CI tests
+- Updated dependencies
+
+
 ## [2.2.2] - 2023-02-08
 ### Changed
 - Downgrade to axios@0.27.2 to fix pkg builds
