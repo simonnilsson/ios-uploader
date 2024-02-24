@@ -8,10 +8,10 @@ jobs:
   publish-npm:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: 16
+          node-version: 20
           registry-url: https://registry.npmjs.org/
       - run: npm ci
       - run: npm publish
@@ -21,13 +21,13 @@ jobs:
   upload-binaries:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: 16
+          node-version: 20
       - run: npm ci
       - run: npm run build
-      - uses: AButler/upload-release-assets@v2.0
+      - uses: AButler/upload-release-assets@v3.0
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-          files: 'build/ios-uploader-*'
+          files: "build/ios-uploader-*"
