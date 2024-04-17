@@ -4,14 +4,14 @@ const { queue } = require('async');
 const { Command } = require('commander');
 const cliProgress = require('cli-progress');
 const prettyBytes = require('pretty-bytes');
-const package = require('../package');
+const { version, name } = require('../package');
 
 const utility = require('../lib/utility');
 const api = require('../lib/index');
 
 const cli = new Command()
-  .version(package.version, '-v, --version', 'output the current version and exit')
-  .name(package.name)
+  .version(version, '-v, --version', 'output the current version and exit')
+  .name(name)
   .usage('-u <username> -p <password> -f <file> [additional-options]')
   .helpOption('-h, --help', 'output this help message and exit')
   .requiredOption('-u, --username <string>', 'your Apple ID')
@@ -32,7 +32,6 @@ function formatValue(v, options, type) {
 }
 
 async function runUpload(ctx) {
-
   let exitCode = 0;
 
   const progressBar = new cliProgress.Bar({
@@ -43,7 +42,6 @@ async function runUpload(ctx) {
   }, cliProgress.Presets.shades_classic);
 
   try {
-
     // Handle URLs to ipa file.
     if (fileUrlRegex.test(ctx.filePath)) {
       ctx.originalFilePath = ctx.filePath;
@@ -52,14 +50,15 @@ async function runUpload(ctx) {
         let started = false;
         ctx.filePath = await utility.downloadTempFile(ctx.filePath, (current, total) => {
           let { speed, eta } = utility.formatSpeedAndEta(current, total, Date.now() - transferStartTime);
-          !started ? progressBar.start(total, current, { task: 'Downloading', speed, etas: eta })
+          !started
+            ? progressBar.start(total, current, { task: 'Downloading', speed, etas: eta })
             : progressBar.update(current, { speed, etas: eta });
           started = true;
         });
         progressBar.stop();
       }
       catch (err) {
-        throw new Error(`Could not download file: ${err.message}`)
+        throw new Error(`Could not download file: ${err.message}`);
       }
       ctx.usingTempFile = true;
     }
@@ -77,7 +76,7 @@ async function runUpload(ctx) {
     }
     catch (err) {
       console.error(err.message);
-      throw new Error('Failed to extract Bundle ID and version, are you supplying a valid IPA-file?')
+      throw new Error('Failed to extract Bundle ID and version, are you supplying a valid IPA-file?');
     }
 
     // Authenticate with Apple.
@@ -109,7 +108,7 @@ async function runUpload(ctx) {
 
     // Start uploading.
     for (let reservation of reservations) {
-      let tasks = reservation.operations.map(operation => ({ ctx, reservation, operation }));
+      let tasks = reservation.operations.map((operation) => ({ ctx, reservation, operation }));
       q.push(tasks, () => {
         let { speed, eta } = utility.formatSpeedAndEta(ctx.bytesSent, ctx.metadataSize + ctx.fileSize, Date.now() - ctx.transferStartTime);
         progressBar.update(ctx.bytesSent, { speed, etas: eta });
@@ -145,7 +144,6 @@ async function runUpload(ctx) {
 }
 
 async function run() {
-
   // Parse command line params
   cli.parse(process.argv);
 
@@ -164,7 +162,6 @@ async function run() {
 }
 
 function stop(signal) {
-
   // Fix to make sure cursor gets restored to visible state when exiting mid progress.
   process.stderr.write('\u001B[?25h');
 

@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - Updated dependencies
 - Switched from vercel/pkg to yao-pkg/pkg as vercel has deprecated pkg
-
+- Updated to ESLint v9 and added formatting rules using @stylistic/eslint-plugin
 
 ## [3.0.0] - 2024-02-24
 ### Changed

@@ -18,7 +18,8 @@
   "scripts": {
     "start": "node bin/cli.js",
     "build": "pkg --out-path build --compress Brotli .",
-    "lint": "eslint ./bin/*.js ./lib/*.js",
+    "lint": "eslint --max-warnings 0 ./bin/*.js ./lib/*.js",
+    "fix": "eslint --fix ./bin/*.js ./lib/*.js",
     "test": "nyc --reporter=text mocha",
     "coverage": "nyc --reporter=lcov mocha"
   },
@@ -36,8 +37,10 @@
     "yauzl": "^3.1.2"
   },
   "devDependencies": {
+    "@stylistic/eslint-plugin": "^1.7.2",
     "@yao-pkg/pkg": "^5.11.5",
-    "eslint": "^8.57.0",
+    "eslint": "^9.0.0",
+    "eslint-plugin-jsdoc": "^48.2.3",
     "mocha": "^10.4.0",
     "nock": "^13.5.4",
     "nyc": "^15.1.0",
