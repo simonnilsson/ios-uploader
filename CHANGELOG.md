@@ -2,6 +2,9 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+### Changed
+- Updated dependencies
+- Switched from vercel/pkg to yao-pkg/pkg as vercel has deprecated pkg
 
 
 ## [3.0.0] - 2024-02-24

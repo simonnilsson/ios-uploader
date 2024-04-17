@@ -21,8 +21,8 @@ const cli = new Command()
 
 const fileUrlRegex = /^(?:https?|ftp):\/\//;
 
-function formatValue(v, options, type){
-  switch (type){
+function formatValue(v, options, type) {
+  switch (type) {
     case 'value':
     case 'total':
       return prettyBytes(v);
@@ -53,7 +53,7 @@ async function runUpload(ctx) {
         ctx.filePath = await utility.downloadTempFile(ctx.filePath, (current, total) => {
           let { speed, eta } = utility.formatSpeedAndEta(current, total, Date.now() - transferStartTime);
           !started ? progressBar.start(total, current, { task: 'Downloading', speed, etas: eta })
-          : progressBar.update(current, { speed, etas: eta });
+            : progressBar.update(current, { speed, etas: eta });
           started = true;
         });
         progressBar.stop();
