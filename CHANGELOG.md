@@ -2,6 +2,8 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+### Changed
+- Updated dependencies
 
 
 ## [3.0.1] - 2024-06-25
