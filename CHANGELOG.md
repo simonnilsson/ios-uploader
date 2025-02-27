@@ -2,6 +2,9 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+
+
+## [3.0.2] - 2025-02-27
 ### Changed
 - Updated dependencies
 - Added Node v22 to CI tests
