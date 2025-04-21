@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "async": "^3.2.6",
-    "axios": "^0.29.0",
+    "axios": "^0.30.0",
     "cli-progress": "^3.12.0",
     "commander": "^13.1.0",
     "concat-stream": "^2.0.0",
@@ -37,14 +37,14 @@
     "yauzl": "^3.2.0"
   },
   "devDependencies": {
-    "@stylistic/eslint-plugin": "^4.1.0",
-    "@yao-pkg/pkg": "^6.3.1",
-    "eslint": "^9.21.0",
-    "eslint-plugin-jsdoc": "^50.6.3",
+    "@stylistic/eslint-plugin": "^4.2.0",
+    "@yao-pkg/pkg": "^6.4.0",
+    "eslint": "^9.25.0",
+    "eslint-plugin-jsdoc": "^50.6.9",
     "mocha": "^11.1.0",
-    "nock": "^14.0.1",
+    "nock": "^14.0.4",
     "nyc": "^17.1.0",
-    "sinon": "^19.0.2"
+    "sinon": "^20.0.0"
   },
   "files": [
     "assets/",
