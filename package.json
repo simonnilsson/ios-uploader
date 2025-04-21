@@ -1,6 +1,6 @@
 {
   "name": "ios-uploader",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "Easy to use, cross-platform tool to upload an iOS app to itunes-connect.",
   "keywords": [
     "ipa",
