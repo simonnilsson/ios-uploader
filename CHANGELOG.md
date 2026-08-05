@@ -2,6 +2,9 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+
+
+## [4.0.1] - 2026-08-05
 ### Changed
 - Updated dependencies
 
@@ -10,7 +13,7 @@ All notable changes to this project will be documented in this file.
 - Fix node shebang
 
 
-## [4.0.0] - 2025-06-18
+## [4.0.0] - 2026-06-18
 ### Added
 - Added project icon
 - Added metadata to Windows executable, including icon
