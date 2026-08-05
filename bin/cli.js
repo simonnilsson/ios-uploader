@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 import { createRequire } from 'node:module';
 import { queue } from 'async';
 import { Command } from 'commander';
