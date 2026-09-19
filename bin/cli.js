@@ -14,7 +14,7 @@ const cli = new Command()
   .usage('-u <username> -p <password> -f <file> [additional-options]')
   .helpOption('-h, --help', 'output this help message and exit')
   .requiredOption('-u, --username <string>', 'your Apple ID')
-  .requiredOption('-p, --password <string>', 'app-specific password for your Apple ID')
+  .option('-p, --password <string>', 'app-specific password for your Apple ID (insecure, prefer IOS_UPLOADER_PASSWORD env var)')
   .requiredOption('-f, --file <string>', 'path to .ipa file for upload (local file or http(s):// URL)')
   .option('-c, --concurrency <number>', 'number of concurrent upload tasks to use', 4)
   .option('-s, --status', 'display upload status and exit');
@@ -188,10 +188,17 @@ export async function run() {
 
   const options = cli.opts();
 
+  // Prefer the password from the environment to avoid exposing it via the process list.
+  const password = process.env.IOS_UPLOADER_PASSWORD || options.password;
+  if (!password) {
+    console.error('Missing password: set the IOS_UPLOADER_PASSWORD environment variable or pass -p/--password.');
+    process.exit(1);
+  }
+
   // Context variable keeping track of all the necessary information for upload procedure.
   const ctx = {
     username: options.username,
-    password: options.password,
+    password,
     filePath: options.file,
     concurrency: options.concurrency,
     status: options.status,
