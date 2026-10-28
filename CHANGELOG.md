@@ -2,6 +2,9 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+
+
+## [4.0.3] - 2026-10-28
 ### Changed
 - Updated dependencies
 
