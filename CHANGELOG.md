@@ -2,6 +2,9 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+### Changed
+- Updated dependencies
+
 ### Fixed
 - Copy transporter User-Agent to fix broken API calls #29
 
