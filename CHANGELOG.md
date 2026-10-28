@@ -2,6 +2,8 @@
 All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
+### Fixed
+- Copy transporter User-Agent to fix broken API calls #29
 
 
 ## [4.0.2] - 2026-09-19
